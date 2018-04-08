@@ -1,8 +1,16 @@
+/*
+  1. Get monooge and create Schema with mongoose.Schema
+  2. Get bcrypt to hash passwords
+  3. Get crypto for md5 hashing gravatar
+*/
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const bcrypt = require('bcrypt-nodejs');
 const crypto = require('crypto');
 
+/*
+  Create user schema as new Schema with email, name and password etc.
+*/
 const UserSchema = new Schema({
   email: {
     type: String,
@@ -22,6 +30,13 @@ const UserSchema = new Schema({
   ]
 });
 
+/*
+  Run this function before user.save
+  if password is not modified just forward to next middleware
+  if password is just input, create a hash using bcrypt.genSalt.
+  if this gives error, return error otherwise continue with hashing.
+  set user.password = hash and forward to next middleware.
+*/
 UserSchema.pre('save', function (next) {
   let user = this;
   if (!user.isModified('password')) 
@@ -40,7 +55,11 @@ UserSchema.pre('save', function (next) {
   }
 });
 
-UserSchema.methods.gravatar = size => {
+/*
+  Creating a new gravatar emthods on this schema to get the
+  gravatar for the logged in user.
+*/
+UserSchema.methods.gravatar = function (size) {
   if (!size) 
     size = 200;
   if (!this.email) 
@@ -52,6 +71,10 @@ UserSchema.methods.gravatar = size => {
   return `https://gravatar.com/avatar/${md5}?s=${size}&d=retro`;
 }
 
+/*
+  method to compare password using bcrypt which will be
+  used when user ties to login
+*/
 UserSchema.methods.comparePassword = function (password) {
   return bcrypt.compareSync(password, this.password);
 }

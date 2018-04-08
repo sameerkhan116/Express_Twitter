@@ -71,7 +71,8 @@ app.use(session({
 }));
 app.use(flash()); // flash middleware to flash messages
 /*
-  Initialize passport middleware and authenticate the current session
+  Initialize passport middleware and authenticate the current session.
+  passport.session() helps in persistent login
 */
 app.use(passport.initialize());
 app.use(passport.session());
