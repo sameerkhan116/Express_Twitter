@@ -5,9 +5,9 @@ const colors = require('colors');
 */
 module.exports = io => {
   io.on('connection', socket => {
-    console.log("Connected!".bgMagenta.cyan);
+    console.log('Socket.io: '.green.bold + "Connected!".cyan);
     // user can now be accessed at socket.request
     const {user} = socket.request;
-    console.log(user.name.red.bold);
+    console.log('Current user: '.magenta.bold + user.name.cyan);
   });
 };

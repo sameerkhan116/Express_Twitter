@@ -56,12 +56,12 @@ require('./realtime/io')(io);
   Success and fail functions are needed for socket.io to make sure we are connected.cookieParser
 */
 const success = (data, accept) => {
-  console.log('Successful Connection'.bgBlue.green);
+  console.log('Passport.socketio: '.green.bold + 'Successful Connection!'.cyan);
   accept();
 }
 
 const fail = (data, message, error, accept) => {
-  console.log('Failed Connection');
+  console.log('Passport.socketio: '.red.bold + 'Failed Connection...'.red);
   if (error) {
     accept(new Error(message));
   }
@@ -92,7 +92,7 @@ io.use(passportSocketIo.authorize({
 mongoose.connect(config.database, err => {
   if (err) 
     console.log(err);
-  console.log('Connected to the database!'.bgRed.yellow);
+  console.log('MongoDB: '.green.bold + 'Connected to the database!'.cyan);
 });
 
 // setting the app view engine
@@ -147,5 +147,5 @@ app.use(userRoutes);
 http.listen(PORT, err => {
   if (err) 
     console.log(err);
-  console.log(`Running on http://localhost:${PORT}`.bgWhite.black);
+  console.log(`Running on http://localhost:${PORT}`.yellow.bold.underline);
 });
