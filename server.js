@@ -8,8 +8,9 @@
   session: to create a session for users
   mongoStore: to store session information server-side
   flash: to flash messages to user
+  cookieParser: to read and write cookies to req.cookie
   passport: authentication middleware
-  cookie-parser:
+  passport.socketio: for connecting passport with socket.io
 */
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -20,15 +21,68 @@ const expressHbs = require('express-handlebars');
 const session = require('express-session');
 const mongoStore = require('connect-mongo')(session);
 const flash = require('express-flash');
+const cookieParser = require('cookie-parser');
 const passport = require('passport');
+const passportSocketIo = require('passport.socketio');
 
 const config = require('./config/secret'); // environment variables
 
 const mainRoutes = require('./routes/main'); // home routes
 const userRoutes = require('./routes/user'); // signup/login routes
 
+/*
+  Some constants required in the server
+  1. PORT for the port server will be listening on
+  2. app is express represented as a function
+  3. store is the mongostore that we created on mlabs
+  4. secret is the secret key we use in the application
+*/
 const PORT = 3000;
 const app = express();
+const store = new mongoStore({url: config.database, autoReconnect: true});
+const {secret} = config;
+
+/*
+  Setting up http for app that will be passed to socket.io
+  also import the io.js file that we setup and pass it the io constant
+  we created using socket.io and http
+*/
+const http = require('http').Server(app);
+const io = require('socket.io')(http);
+require('./realtime/io')(io);
+
+/*
+  Success and fail functions are needed for socket.io to make sure we are connected.cookieParser
+*/
+const success = (data, accept) => {
+  console.log('Successful Connection');
+  accept();
+}
+
+const fail = (data, message, error, accept) => {
+  console.log('Failed Connection');
+  if (error) {
+    accept(new Error(message));
+  }
+}
+
+/*
+  Authorizing socket.io to use the session of passport
+    • cookieParser for parsing cookies in this request
+    • key for the current session
+    • the secret that we used for the session
+    • the store where session is stored
+    • a success function
+    • a fail function
+*/
+io.use(passportSocketIo.authorize({
+  cookieParser,
+  key: 'connect.sid',
+  secret,
+  store,
+  success,
+  fail
+}));
 
 /*
   using mongoose to connect to connect to mongodb set up on mlabs.
@@ -63,8 +117,8 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(session({
   resave: true,
   saveUninitialized: true,
-  secret: config.secret,
-  store: new mongoStore({url: config.database, autoReconnect: true}),
+  secret,
+  store,
   cookie: {
     secure: true
   }
@@ -89,7 +143,7 @@ app.use(mainRoutes);
 app.use(userRoutes);
 
 // start server
-app.listen(PORT, err => {
+http.listen(PORT, err => {
   if (err) 
     console.log(err);
   console.log(`Running on http://localhost:${PORT}`);
