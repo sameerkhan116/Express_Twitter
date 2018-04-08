@@ -24,6 +24,7 @@ const flash = require('express-flash');
 const cookieParser = require('cookie-parser');
 const passport = require('passport');
 const passportSocketIo = require('passport.socketio');
+const colors = require('colors');
 
 const config = require('./config/secret'); // environment variables
 
@@ -55,7 +56,7 @@ require('./realtime/io')(io);
   Success and fail functions are needed for socket.io to make sure we are connected.cookieParser
 */
 const success = (data, accept) => {
-  console.log('Successful Connection');
+  console.log('Successful Connection'.bgBlue.green);
   accept();
 }
 
@@ -91,7 +92,7 @@ io.use(passportSocketIo.authorize({
 mongoose.connect(config.database, err => {
   if (err) 
     console.log(err);
-  console.log('Connected to the database!');
+  console.log('Connected to the database!'.bgRed.yellow);
 });
 
 // setting the app view engine
@@ -146,5 +147,5 @@ app.use(userRoutes);
 http.listen(PORT, err => {
   if (err) 
     console.log(err);
-  console.log(`Running on http://localhost:${PORT}`);
+  console.log(`Running on http://localhost:${PORT}`.bgWhite.black);
 });
