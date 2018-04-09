@@ -12,7 +12,7 @@ const Schema = mongoose.Schema;
 */
 const TweetSchema = new Schema({
   owner: {
-    type: Schema.Types.ObjectI,
+    type: Schema.Types.ObjectId,
     ref: 'User'
   },
   content: String,
