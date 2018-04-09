@@ -23,8 +23,8 @@ export default io => {
       io.emit('incomingTweets', {content, user});
       let tweet = new Tweet({content, owner: user._id});
       await Promise.all([
-        await tweet.save(),
-        await User.update({
+        tweet.save(),
+        User.update({
           id: user._id
         }, {
           $push: {

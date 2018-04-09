@@ -1,5 +1,5 @@
 <div class="starter-template">
-  <p class="lead">What is happening?</p>
+  <h1>What is happening?</h1>
 </div>
 
 <div class="col-md-6 offset-md-3">
@@ -20,12 +20,15 @@
       </a>
       <div class="media-body">
         <h4 class="mt-0">{{owner.name}}
-          <small>
+          <small class="text-muted">
             <i>
-              {{formatDate created}}</small>
-          </i>
+              {{formatDate created}}
+            </i>
+          </small>
         </h4>
-        <p>{{ content }}</p>
+        <blockquote class="blockquote">
+          <p class="mb-0">{{ content }}</p>
+        </blockquote>
       </div>
     </div>
     {{/each}}

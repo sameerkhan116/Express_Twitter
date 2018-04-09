@@ -28,6 +28,7 @@ import passport from 'passport';
 import passportSocketIo from 'passport.socketio';
 import colors from 'colors';
 import moment from 'moment';
+import expressValidator from 'express-validator';
 
 import config from './config/secret';
 
@@ -117,6 +118,7 @@ app.set('view engine', 'hbs');
 app.use(express.static(__dirname + '/public'));
 // for dev purposes
 app.use(logger('dev'));
+app.use(expressValidator());
 /*
   parse the entire body portion of an incoming request stream and exposes it on req.body in json
   also support parsing of application / x - www - form - urlencoded post data
@@ -142,7 +144,6 @@ app.use(passport.session());
 */
 app.use((req, res, next) => {
   res.locals.user = req.user;
-  res.locals.moment = moment;
   next();
 })
 

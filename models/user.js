@@ -6,6 +6,7 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcrypt-nodejs';
 import crypto from 'crypto';
+import validator from 'validator';
 
 const Schema = mongoose.Schema;
 /*
@@ -15,9 +16,16 @@ const UserSchema = new Schema({
   email: {
     type: String,
     unique: true,
-    lowercase: true
+    lowercase: true,
+    required: 'Please provide an email',
+    trim: true,
+    validate: [validator.isEmail, 'Invalid Email Address']
   },
-  name: String,
+  name: {
+    type: String,
+    required: true,
+    trim: true
+  },
   password: String,
   photo: String,
   tweets: [

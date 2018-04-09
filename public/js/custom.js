@@ -6,19 +6,18 @@
 */
 document.addEventListener('DOMContentLoaded', () => {
   let socket = io();
-  if (document.getElementById('sendTweet')) {
-    document
-      .getElementById('sendTweet')
-      .addEventListener('submit', e => {
-        e.preventDefault();
-        let content = document
-          .getElementById('tweet')
-          .value;
-        socket.emit('tweet', {content});
-        document
-          .getElementById('tweet')
-          .value = '';
-      });
+  let send = document.getElementById('sendTweet');
+  if (send) {
+    send.addEventListener('submit', e => {
+      e.preventDefault();
+      let content = document
+        .getElementById('tweet')
+        .value;
+      socket.emit('tweet', {content});
+      document
+        .getElementById('tweet')
+        .value = '';
+    });
   }
 
   // In io.js, we emit the data back to be rendered on the front end. For this we
