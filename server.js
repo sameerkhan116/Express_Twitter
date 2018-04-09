@@ -12,6 +12,7 @@
   passport: authentication middleware
   passport.socketio: for connecting passport with socket.io
   colors: for adding colors to console.log statements
+  moment: for time from now
 */
 import express from 'express';
 import bodyParser from 'body-parser';
@@ -26,6 +27,7 @@ import cookieParser from 'cookie-parser';
 import passport from 'passport';
 import passportSocketIo from 'passport.socketio';
 import colors from 'colors';
+import moment from 'moment';
 
 import config from './config/secret';
 
@@ -102,7 +104,13 @@ mongoose.connect(config.database, err => {
 });
 
 // setting the app view engine
-app.engine('.hbs', expressHbs({defaultLayout: 'layout', extname: '.hbs'}));
+app.engine('.hbs', expressHbs({
+  defaultLayout: 'layout',
+  extname: '.hbs',
+  helpers: {
+    formatDate: (date, format) => moment(date).fromNow()
+  }
+}));
 app.set('view engine', 'hbs');
 // for serving static files in express. all files will automically get the
 // /public prefix
@@ -134,6 +142,7 @@ app.use(passport.session());
 */
 app.use((req, res, next) => {
   res.locals.user = req.user;
+  res.locals.moment = moment;
   next();
 })
 
