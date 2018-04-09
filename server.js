@@ -108,7 +108,7 @@ app.engine('.hbs', expressHbs({
   defaultLayout: 'layout',
   extname: '.hbs',
   helpers: {
-    formatDate: (date, format) => moment(date).fromNow()
+    formatDate: date => moment(date).fromNow()
   }
 }));
 app.set('view engine', 'hbs');

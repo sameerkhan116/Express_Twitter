@@ -19,8 +19,12 @@
         <img src="{{owner.photo}}" alt="{{owner.name}}" class="media-object">
       </a>
       <div class="media-body">
-        <h4 class="mt-0">{{owner.name}}</h4>
-        <h5 class="mt-0">{{formatDate created}}</h5>
+        <h4 class="mt-0">{{owner.name}}
+          <small>
+            <i>
+              {{formatDate created}}</small>
+          </i>
+        </h4>
         <p>{{ content }}</p>
       </div>
     </div>

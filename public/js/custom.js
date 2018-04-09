@@ -6,18 +6,20 @@
 */
 document.addEventListener('DOMContentLoaded', () => {
   let socket = io();
-  document
-    .getElementById('sendTweet')
-    .addEventListener('submit', e => {
-      e.preventDefault();
-      let content = document
-        .getElementById('tweet')
-        .value;
-      socket.emit('tweet', {content});
-      document
-        .getElementById('tweet')
-        .value = '';
-    });
+  if (document.getElementById('sendTweet')) {
+    document
+      .getElementById('sendTweet')
+      .addEventListener('submit', e => {
+        e.preventDefault();
+        let content = document
+          .getElementById('tweet')
+          .value;
+        socket.emit('tweet', {content});
+        document
+          .getElementById('tweet')
+          .value = '';
+      });
+  }
 
   // In io.js, we emit the data back to be rendered on the front end. For this we
   // need to create a new child element and prepend to the parent element.

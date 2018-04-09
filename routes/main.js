@@ -10,17 +10,17 @@ const router = route.Router();
   automatically poplulate the owner field. Also sort the data
   according to when it was created
 */
-router.get('/', (req, res, next) => {
-  req.user
-    ? Tweet
+router.get('/', async(req, res, next) => {
+  if (req.user) {
+    let tweets = await Tweet
       .find({})
-      .sort('created')
-      .populate('owner')
-      .exec((err, tweets) => {
-        console.log(tweets);
-        res.render('main/home', {tweets});
-      })
-    : res.render('main/landing');
-});
+      .sort({'created': -1})
+      .populate('owner');
+    console.log(tweets);
+    res.render('main/home', {tweets});
+  } else 
+    res.render('main/landing');
+  }
+);
 
 export default router;
