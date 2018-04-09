@@ -3,11 +3,11 @@
   2. Get bcrypt to hash passwords
   3. Get crypto for md5 hashing gravatar
 */
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
-const bcrypt = require('bcrypt-nodejs');
-const crypto = require('crypto');
+import mongoose from 'mongoose';
+import bcrypt from 'bcrypt-nodejs';
+import crypto from 'crypto';
 
+const Schema = mongoose.Schema;
 /*
   Create user schema as new Schema with email, name and password etc.
 */
@@ -79,4 +79,4 @@ UserSchema.methods.comparePassword = function (password) {
   return bcrypt.compareSync(password, this.password);
 }
 
-module.exports = mongoose.model('User', UserSchema);
+export default mongoose.model('User', UserSchema);

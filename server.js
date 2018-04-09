@@ -11,33 +11,35 @@
   cookieParser: to read and write cookies to req.cookie
   passport: authentication middleware
   passport.socketio: for connecting passport with socket.io
+  colors: for adding colors to console.log statements
 */
-const express = require('express');
-const bodyParser = require('body-parser');
-const morgan = require('morgan');
-const mongoose = require('mongoose');
-const hbs = require('hbs');
-const expressHbs = require('express-handlebars');
-const session = require('express-session');
-const mongoStore = require('connect-mongo')(session);
-const flash = require('express-flash');
-const cookieParser = require('cookie-parser');
-const passport = require('passport');
-const passportSocketIo = require('passport.socketio');
-const colors = require('colors');
+import express from 'express';
+import bodyParser from 'body-parser';
+import logger from 'morgan';
+import mongoose from 'mongoose';;
+import hbs from 'hbs';
+import expressHbs from 'express-handlebars';
+import session from 'express-session';
+import flash from 'express-flash';
+import connectMongo from 'connect-mongo';
+import cookieParser from 'cookie-parser';
+import passport from 'passport';
+import passportSocketIo from 'passport.socketio';
+import colors from 'colors';
 
-const config = require('./config/secret'); // environment variables
+import config from './config/secret';
 
-const mainRoutes = require('./routes/main'); // home routes
-const userRoutes = require('./routes/user'); // signup/login routes
+import mainRoutes from './routes/main'; // home routes
+import userRoutes from './routes/user'; // signup/login routes
 
 /*
-  Some constants required in the server
-  1. PORT for the port server will be listening on
-  2. app is express represented as a function
-  3. store is the mongostore that we created on mlabs
-  4. secret is the secret key we use in the application
+Some constants required in the server
+1. PORT for the port server will be listening on
+2. app is express represented as a function
+3. store is the mongostore that we created on mlabs
+4. secret is the secret key we use in the application
 */
+const mongoStore = connectMongo(session);
 const PORT = 3000;
 const app = express();
 const store = new mongoStore({url: config.database, autoReconnect: true});
@@ -48,9 +50,13 @@ const {secret} = config;
   also import the io.js file that we setup and pass it the io constant
   we created using socket.io and http
 */
-const http = require('http').Server(app);
-const io = require('socket.io')(http);
-require('./realtime/io')(io);
+import HTTP from 'http';
+import IO from 'socket.io';
+import realtime from './realtime/io';
+
+const http = HTTP.Server(app);
+const io = IO(http);
+realtime(io);
 
 /*
   Success and fail functions are needed for socket.io to make sure we are connected.cookieParser
@@ -90,9 +96,9 @@ io.use(passportSocketIo.authorize({
   callback tells us if error or successful
 */
 mongoose.connect(config.database, err => {
-  if (err) 
-    console.log(err);
-  console.log('MongoDB: '.green.bold + 'Connected to the database!'.cyan);
+  (err)
+    ? console.log(err)
+    : console.log('MongoDB: '.green.bold + 'Connected to the database!'.cyan);
 });
 
 // setting the app view engine
@@ -102,7 +108,7 @@ app.set('view engine', 'hbs');
 // /public prefix
 app.use(express.static(__dirname + '/public'));
 // for dev purposes
-app.use(morgan('dev'));
+app.use(logger('dev'));
 /*
   parse the entire body portion of an incoming request stream and exposes it on req.body in json
   also support parsing of application / x - www - form - urlencoded post data
@@ -115,15 +121,7 @@ app.use(bodyParser.urlencoded({extended: true}));
     • saveUnitialized: Forces a session that is "uninitialized" to be saved to the store. A session is uninitialized when it is new but not modified.
     • secret: require option - used to sign the session ID cookie
 */
-app.use(session({
-  resave: true,
-  saveUninitialized: true,
-  secret,
-  store,
-  cookie: {
-    secure: true
-  }
-}));
+app.use(session({resave: true, saveUninitialized: true, secret, store}));
 app.use(flash()); // flash middleware to flash messages
 /*
   Initialize passport middleware and authenticate the current session.
@@ -145,7 +143,7 @@ app.use(userRoutes);
 
 // start server
 http.listen(PORT, err => {
-  if (err) 
-    console.log(err);
-  console.log(`Running on http://localhost:${PORT}`.yellow.bold.underline);
+  (err)
+    ? console.log(err)
+    : console.log(`Running on http://localhost:${PORT}`.yellow.bold.underline);
 });

@@ -3,9 +3,12 @@
   2. Get the local strategy from passport-local
   3. Get the user model from the model we created
 */
-const passport = require('passport');
-const LocalStrategy = require('passport-local').Strategy;
-const User = require('../models/user');
+import passport from 'passport';
+import LS from 'passport-local';
+
+import User from '../models/user';
+
+const LocalStrategy = LS.Strategy;
 
 /*
   To maintain persistent login sessions. Authenticated user is serialized to the session.

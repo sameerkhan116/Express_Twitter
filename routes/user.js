@@ -4,11 +4,13 @@
   3. Get passport libraries.
   4. Get passport configuration that we just set up.
 */
-const router = require('express').Router();
-const User = require('../models/user');
-const passport = require('passport');
-const passportConfig = require('../config/passport');
+import route from 'express';
+import passport from 'passport';
 
+import passportConfig from '../config/passport';
+import User from '../models/user';
+
+const router = route.Router();
 /*
   For /signup endpoint.
   GET: Render the signup page and flash any errors if available.
@@ -77,4 +79,4 @@ router.get('/logout', (req, res, next) => {
   res.redirect('/');
 })
 
-module.exports = router;
+export default router;

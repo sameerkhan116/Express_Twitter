@@ -1,7 +1,8 @@
 /*
   require mongoose for model and schema and create the schema
 */
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
+
 const Schema = mongoose.Schema;
 
 /*
@@ -24,4 +25,4 @@ const TweetSchema = new Schema({
 /*
   Export this schema as Tweet mongoose model.
 */
-module.exports = mongoose.model('Tweet', TweetSchema);
+export default mongoose.model('Tweet', TweetSchema);

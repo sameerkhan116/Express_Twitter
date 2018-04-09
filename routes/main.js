@@ -1,4 +1,6 @@
-const router = require('express').Router();
+import route from 'express';
+
+const router = route.Router();
 
 /*
   Rendering the home page available at main/landing
@@ -9,4 +11,4 @@ router.get('/', (req, res, next) => {
     : res.render('main/landing');
 });
 
-module.exports = router;
+export default router;

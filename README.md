@@ -2,9 +2,9 @@
 
 An application for realtime tweeting using Express with Handlebars view engine.
 Using passport for authentication with local strategy.
-Also using socket.io to communicating with twitter for realtime updates.
+Also using socket.io for communicating with twitter for realtime updates.
 
-To run clone the contents of this repository and in the terminal:
+To run clone the contents of this repository and in the terminal run:
 
 ```javascript
   yarn run run
