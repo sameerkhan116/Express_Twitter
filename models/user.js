@@ -35,6 +35,18 @@ const UserSchema = new Schema({
         ref: 'Tweet'
       }
     }
+  ],
+  following: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'User'
+    }
+  ],
+  followers: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'User'
+    }
   ]
 });
 

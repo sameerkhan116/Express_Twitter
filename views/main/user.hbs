@@ -1,0 +1,75 @@
+<div class="col-md-6 offset-md-3">
+
+  <div class="starter-template">
+    <h2>{{user.name}}</h2>
+    <img src="{{user.photo}}" alt="{{user.name}} " class="photo-size ">
+    <br/>
+    <br/>
+    <input type="hidden" id="user_id" value="{{user._id}}" />
+    <p>
+      <button class="btn btn-dark" id="follow">Follow</button>
+    </p>
+  </div>
+
+  <ul class="nav nav-pills nav-fill">
+    <li class="nav-item active">
+      <a class="nav-link active" data-toggle="tab" href="#home">Tweets</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" data-toggle="tab" href="#menu1">Following</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" data-toggle="tab" href="#menu2">Followers</a>
+    </li>
+  </ul>
+
+  <div class="tab-content card">
+    <div id="home" class="tab-pane fade in show active">
+      {{#each tweets}}
+      <div class="media">
+        <a class="pr-3" href="#">
+          <img src="{{owner.photo}}" alt="{{owner.name}}" class="media-object">
+        </a>
+        <div class="media-body">
+          <h4 class="mt-0">{{owner.name}}
+            <small class="text-muted">
+              <i>
+                {{formatDate created}}
+              </i>
+            </small>
+          </h4>
+          <blockquote class="blockquote">
+            <p class="mb-0">{{ content }}</p>
+          </blockquote>
+        </div>
+      </div>
+      {{/each}}
+    </div>
+
+    <div id="menu1" class="tab-pane fade">
+      {{#each user.following}}
+      <div class="media ">
+        <a class="pr-3 " href="# ">
+          <img src="{{photo}} " alt="{{name}} " class="media-object ">
+        </a>
+        <div class="media-body ">
+          <h4 class="mt-0 ">{{name}}</h4>
+        </div>
+      </div>
+      {{/each}}
+    </div>
+
+    <div id="menu2" class="tab-pane fade ">
+      {{#each user.followers}}
+      <div class="media ">
+        <a class="pr-3 " href="# ">
+          <img src="{{photo}} " alt="{{name}} " class="media-object ">
+        </a>
+        <div class="media-body ">
+          <h4 class="mt-0 ">{{name}}Hi!</h4>
+        </div>
+      </div>
+      {{/each}}
+    </div>
+  </div>
+</div>

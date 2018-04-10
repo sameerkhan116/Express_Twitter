@@ -30,8 +30,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const refChild = parentNode.firstElementChild;
 
     let html = '';
-    html += `<a class="pr-3" href ="#">`;
-    html += `<img src = ${user.photo} alt=${user.name} class="media-object"></a>`;
+    html += `<a class="pr-3" href="/user/${user._id}">`;
+    html += `<img src=${user.photo} alt=${user.name} class="media-object"></a>`;
     html += `<div class="media-body"><h4 class="mt-0">${user.name}</h4>`;
     html += `<p>${content}</p></div>`;
 

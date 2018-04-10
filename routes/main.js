@@ -1,6 +1,7 @@
 import route from 'express';
 
 import Tweet from '../models/tweet';
+import User from '../models/user';
 
 const router = route.Router();
 
@@ -12,7 +13,7 @@ const router = route.Router();
 */
 router.get('/', async(req, res, next) => {
   if (req.user) {
-    let tweets = await Tweet
+    const tweets = await Tweet
       .find({})
       .sort({'created': -1})
       .populate('owner');
@@ -22,5 +23,48 @@ router.get('/', async(req, res, next) => {
     res.render('main/landing');
   }
 );
+
+router.get('/user/:id', async(req, res, next) => {
+  const tweets = await Tweet
+    .find({owner: req.params.id})
+    .populate('owner');
+
+  const user = await User
+    .findOne({_id: req.params.id})
+    .populate('following')
+    .populate('followers');
+
+  res.render('main/user', {user, tweets})
+});
+
+router.post('/follow/:id', async(req, res, next) => {
+  console.log(req.user);
+  const follower = await User.update({
+    _id: req.user._id,
+    following: {
+      $ne: req.params.id
+    }
+  }, {
+    $push: {
+      following: req.params.id
+    }
+  });
+
+  const following = await User.update({
+    _id: req.params.id,
+    followers: {
+      $ne: req.user._id
+    }
+  }, {
+    $push: {
+      followers: req.user._id
+    }
+  });
+
+  await Promise
+    .all([follower, following])
+    .then(res.json("success"))
+    .catch(err => console.log(err));
+})
 
 export default router;
