@@ -4,11 +4,20 @@
     <h2>{{user.name}}</h2>
     <img src="{{user.photo}}" alt="{{user.name}} " class="photo-size ">
     <br/>
-    <br/>
-    <input type="hidden" id="user_id" value="{{user._id}}" />
+    <br/> 
+    {{#if currentUser}} 
+    {{ else }}
+    <input type="hidden" id="user_id" value="{{user._id}}" /> 
+    {{#if follower}}
+    <p>
+      <button class="btn btn-primary" id="unfollow">Following</button>
+    </p>
+    {{ else }}
     <p>
       <button class="btn btn-dark" id="follow">Follow</button>
     </p>
+    {{/if}}
+    {{/if}}
   </div>
 
   <ul class="nav nav-pills nav-fill">
@@ -27,7 +36,7 @@
     <div id="home" class="tab-pane fade in show active">
       {{#each tweets}}
       <div class="media">
-        <a class="pr-3" href="#">
+        <a class="pr-3" href="/user/{{owner.id}}">
           <img src="{{owner.photo}}" alt="{{owner.name}}" class="media-object">
         </a>
         <div class="media-body">
@@ -48,25 +57,25 @@
 
     <div id="menu1" class="tab-pane fade">
       {{#each user.following}}
-      <div class="media ">
-        <a class="pr-3 " href="# ">
-          <img src="{{photo}} " alt="{{name}} " class="media-object ">
+      <div class="media">
+        <a class="pr-3" href="/user/{{id}}">
+          <img src="{{photo}}" alt="{{name}}" class="media-object">
         </a>
-        <div class="media-body ">
-          <h4 class="mt-0 ">{{name}}</h4>
+        <div class="media-body">
+          <h4 class="mt-0">{{name}}</h4>
         </div>
       </div>
       {{/each}}
     </div>
 
-    <div id="menu2" class="tab-pane fade ">
+    <div id="menu2" class="tab-pane fade">
       {{#each user.followers}}
-      <div class="media ">
-        <a class="pr-3 " href="# ">
-          <img src="{{photo}} " alt="{{name}} " class="media-object ">
+      <div class="media">
+        <a class="pr-3" href="/user/{{id}}">
+          <img src="{{photo}}" alt="{{name}}" class="media-object">
         </a>
-        <div class="media-body ">
-          <h4 class="mt-0 ">{{name}}Hi!</h4>
+        <div class="media-body">
+          <h4 class="mt-0">{{name}}</h4>
         </div>
       </div>
       {{/each}}

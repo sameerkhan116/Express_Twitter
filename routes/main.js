@@ -34,7 +34,15 @@ router.get('/user/:id', async(req, res, next) => {
     .populate('following')
     .populate('followers');
 
-  res.render('main/user', {user, tweets})
+  let follower = user
+    .followers
+    .some((friend) => friend.equals(req.user._id));
+
+  let currentUser = (req.user._id.equals(user._id))
+    ? true
+    : false;
+
+  res.render('main/user', {user, tweets, currentUser, follower})
 });
 
 router.post('/follow/:id', async(req, res, next) => {
@@ -57,6 +65,30 @@ router.post('/follow/:id', async(req, res, next) => {
     }
   }, {
     $push: {
+      followers: req.user._id
+    }
+  });
+
+  await Promise
+    .all([follower, following])
+    .then(res.json("success"))
+    .catch(err => console.log(err));
+});
+
+router.post('/unfollow/:id', async(req, res, next) => {
+  console.log(req.user);
+  const follower = await User.update({
+    _id: req.user._id
+  }, {
+    $pull: {
+      following: req.params.id
+    }
+  });
+
+  const following = await User.update({
+    _id: req.params.id
+  }, {
+    $pull: {
       followers: req.user._id
     }
   });
